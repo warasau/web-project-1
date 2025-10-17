@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">Заголовок по умолчанию</title>
+    <style>
+        body {
+            background-color: #2b2b2b;
+            color: #eeeeee;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        div {
+            border: 1px solid #444;
+            padding: 40px;
+            border-radius: 8px;
+            background-color: #3c3f41;
+        }
+        h1 {
+           color: #ffffff;
+        }
+        p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+<div th:utext="${content}">
+    <!-- content -->
+</div>
+</body>
+</html>
