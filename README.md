@@ -1,4 +1,4 @@
-# Lab Work 1-3: Introduction to Spring Boot
+# Lab Work 1-4: Introduction to Spring Boot
 
 ## Overview
 
@@ -26,6 +26,9 @@ A web application built with Spring Boot to automate core library operations. Th
    DB_USER={YOUR_USERNAME}
    DB_PASSWORD={YOUR_PASSWORD}
    DB_NAME={YOUR_DB_NAME}
+   
+   ADMIN_USERNAME=admin
+   ADMIN_PASSWORD=Qwe123!@
 ```
    
 2. Run the Database
@@ -47,6 +50,29 @@ The application will be available at http://localhost:8081.
 *   `GET /say/{message}`
     *   Displays a custom message provided in the URL path.
     *   Example: `http://localhost:8081/say/hello-world`
+
+### Lab4:
+#### Security and User Management
+New Core Entity: User
+*   Represents a system user with a username, hashed password, and a set of roles (ROLE_USER, ROLE_ADMIN). Users are stored in the database.
+
+#### User Management Endpoints
+*   `GET /auth/register`
+    *   Processes new user registration
+*   `POST /auth/register`
+    *   Displays the user registration form
+    *   username:{username}
+    *   password:{password}
+*   `GET /auth/login`
+    *   Displays the user login form
+*   `POST /auth/login`
+    *   Processes user authentication
+    *   username:{username}
+    *   password:{password}
+*   `POST /auth/logout`
+    *   Logs the current user out
+
+On the first launch, the application creates a default administrator account. Credentials for this account must be configured in the .env file.
 
 ## API Endpoints
 

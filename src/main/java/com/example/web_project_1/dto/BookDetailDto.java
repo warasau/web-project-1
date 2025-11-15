@@ -8,6 +8,6 @@ public class BookDetailDto {
     private Long id;
     private String title;
     private LocalDate expirationDate;
-    private Long readerId; // <-- Только ID читателя
+    private Long readerId;
     private Set<AuthorDto> authors;
 }

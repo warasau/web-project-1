@@ -23,7 +23,7 @@ public class Author {
     private String lastName;
 
     @ManyToMany(mappedBy = "authors") // Связь Многие-ко-Многим с Книгами.
-    @ToString.Exclude // защита от рекурсии
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Book> books = new HashSet<>();
 }

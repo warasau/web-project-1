@@ -85,7 +85,6 @@ public class LibraryController {
 
     @PostMapping("/process-overdue")
     public ResponseEntity<List<FineDetailDto>> processOverdueBooks() {
-        // This method now internally calls the single-user checkAndBanReader
         List<FineDetailDto> fines = libraryService.processOverdueBooks();
         return ResponseEntity.ok(fines);
     }

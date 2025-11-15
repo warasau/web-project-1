@@ -11,5 +11,5 @@ public class ReaderDetailDto {
     private String email;
     private boolean isBanned;
     private Set<BookSummaryDto> books;
-    private List<FineDto> fines; // <-- ДОБАВЛЕНО
+    private List<FineDto> fines;
 }

@@ -27,14 +27,14 @@ public class LibraryManagementService {
     private final BookRepository bookRepository;
     private final ReaderRepository readerRepository;
     private final FineRepository fineRepository;
-    private final ApplicationMapper mapper; // <-- ВНЕДРЯЕМ МАППЕР
+    private final ApplicationMapper mapper;
 
     @Autowired
     public LibraryManagementService(BookRepository bookRepository, ReaderRepository readerRepository, FineRepository fineRepository, ApplicationMapper mapper) {
         this.bookRepository = bookRepository;
         this.readerRepository = readerRepository;
         this.fineRepository = fineRepository;
-        this.mapper = mapper; // <-- ИНИЦИАЛИЗИРУЕМ
+        this.mapper = mapper;
     }
 
     /** 1. Выдать книгу читателю */
@@ -55,7 +55,7 @@ public class LibraryManagementService {
         book.setReader(reader);
         book.setExpirationDate(LocalDate.now().plusWeeks(BORROWING_PERIOD_WEEKS));
         Book savedBook = bookRepository.save(book);
-        return mapper.toBookDetailDto(savedBook); // <-- ВОЗВРАЩАЕМ DTO
+        return mapper.toBookDetailDto(savedBook);
     }
 
     /** 2. Вернуть книгу */
@@ -71,13 +71,13 @@ public class LibraryManagementService {
         book.setReader(null);
         book.setExpirationDate(null);
         Book savedBook = bookRepository.save(book);
-        return mapper.toBookDetailDto(savedBook); // <-- ВОЗВРАЩАЕМ DTO
+        return mapper.toBookDetailDto(savedBook);
     }
 
     /** 3. Оплатить штраф и проверить разбан */
     @Transactional
     public ReaderDetailDto payFine(Long fineId) {
-        Fine fine = fineRepository.findByIdWithDetails(fineId) // Используем метод с FETCH
+        Fine fine = fineRepository.findByIdWithDetails(fineId)
                 .orElseThrow(() -> new EntityNotFoundException("Fine not found"));
 
         if (fine.isPaid()) {
@@ -93,12 +93,12 @@ public class LibraryManagementService {
         if (reader.isBanned() && unpaidFinesCount < 3) {
             reader.setBanned(false);
             Reader savedReader = readerRepository.save(reader);
-            return mapper.toReaderDetailDto(savedReader); // <-- ВОЗВРАЩАЕМ DTO
+            return mapper.toReaderDetailDto(savedReader);
         }
-        return mapper.toReaderDetailDto(reader); // <-- ВОЗВРАЩАЕМ DTO
+        return mapper.toReaderDetailDto(reader);
     }
 
-    /** Вспомогательный метод, может остаться внутренним */
+    /** 4. Проверка одного пользователя */
     @Transactional
     public ReaderDetailDto checkAndBanReader(Long readerId) {
         Reader reader = readerRepository.findByIdWithDetails(readerId)
@@ -138,9 +138,8 @@ public class LibraryManagementService {
                 checkAndBanReader(reader.getId());
             }
         }
-        // Преобразуем список созданных штрафов в DTO перед возвратом
         return createdFines.stream()
                 .map(mapper::toFineDetailDto)
-                .collect(Collectors.toList()); // <-- ВОЗВРАЩАЕМ СПИСОК DTO
+                .collect(Collectors.toList());
     }
 }

@@ -23,10 +23,10 @@ public class Book {
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
 
-    @ManyToOne(fetch = FetchType.LAZY) // LAZY - загружать читателя только когда он явно нужен
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reader_id")
-    @ToString.Exclude // Исключаем из toString, чтобы избежать рекурсии
-    @EqualsAndHashCode.Exclude // Исключаем для корректной работы equals/hashCode
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Reader reader;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })  // Связь Многие-ко-Многим с Автором

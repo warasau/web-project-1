@@ -35,7 +35,7 @@ public class Reader {
     @EqualsAndHashCode.Exclude
     private Set<Book> books = new HashSet<>();
 
-    @OneToMany(mappedBy = "reader", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "reader", cascade = CascadeType.ALL, orphanRemoval = true) // Один ко многим: для нескольких штрафов - readerId
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<Fine> fines = new ArrayList<>();

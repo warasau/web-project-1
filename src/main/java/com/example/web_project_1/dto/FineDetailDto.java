@@ -6,5 +6,5 @@ public class FineDetailDto {
     private Long id;
     private String description;
     private boolean isPaid;
-    private Long readerId; // <-- Ключевой момент
+    private Long readerId;
 }

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
-@Controller // Заменяем @RestController на @Controller
+@Controller
 public class GreetingController {
 
     @GetMapping("/")
@@ -18,7 +18,7 @@ public class GreetingController {
                      """;
         model.addAttribute("title", "Lab 1: Introduction to Spring Boot");
         model.addAttribute("content", content);
-        return "layout"; // Возвращаем имя файла шаблона (без .html)
+        return "layout";
     }
 
     @GetMapping("/say/{text}")

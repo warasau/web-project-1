@@ -7,5 +7,5 @@ public class AuthorDetailDto {
     private Long id;
     private String firstName;
     private String lastName;
-    private List<Long> bookIds; // <-- Только ID книг
+    private List<Long> bookIds;
 }

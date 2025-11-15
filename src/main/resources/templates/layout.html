@@ -1,37 +1,35 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${title}">Заголовок по умолчанию</title>
+    <title th:text="${title}">Заголовок</title>
     <style>
-        body {
-            background-color: #2b2b2b;
-            color: #eeeeee;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-        }
-        div {
-            border: 1px solid #444;
-            padding: 40px;
-            border-radius: 8px;
-            background-color: #3c3f41;
-        }
-        h1 {
-           color: #ffffff;
-        }
-        p {
-            font-size: 18px;
-        }
+        body { background-color: #2b2b2b; color: #eeeeee; font-family: Arial, sans-serif; text-align: center; padding-top: 50px; }
+        .container { border: 1px solid #444; padding: 40px; border-radius: 8px; background-color: #3c3f41; display: inline-block; }
+        h1 { color: #ffffff; }
+        p { font-size: 18px; }
+        .nav { margin-top: 30px; }
+        .nav a, .nav form button { text-decoration: none; color: #eee; background-color: #ff990f; padding: 10px 15px; border-radius: 4px; margin: 0 10px; border: none; cursor: pointer; font-size: 16px; }
+        .nav form { display: inline; }
     </style>
 </head>
 <body>
-<div th:utext="${content}">
-    <!-- content -->
+<div class="container">
+    <div th:utext="${content}">
+        <!-- content -->
+    </div>
+    <div class="nav">
+        <div sec:authorize="!isAuthenticated()">
+            <a th:href="@{/auth/login}">Sign in</a>
+            <a th:href="@{/auth/register}">Sign up</a>
+        </div>
+
+        <div sec:authorize="isAuthenticated()">
+            <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+                <button type="submit">Exit</button>
+            </form>
+        </div>
+    </div>
 </div>
 </body>
 </html>

@@ -41,7 +41,6 @@ public class FineService {
         fine.setPaid(false);
 
         Fine savedFine = fineRepository.save(fine);
-        // Возвращаем DTO, который не имеет циклических ссылок
         return mapper.toFineDetailDto(savedFine);
     }
 

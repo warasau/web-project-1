@@ -1,4 +1,5 @@
 .env
+blacknote/
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
