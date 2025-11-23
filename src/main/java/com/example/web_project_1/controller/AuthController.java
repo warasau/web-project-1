@@ -1,65 +1,63 @@
 package com.example.web_project_1.controller;
 
+import com.example.web_project_1.dto.LoginRequest;
+import com.example.web_project_1.dto.RefreshRequest;
 import com.example.web_project_1.dto.RegisterRequestDto;
+import com.example.web_project_1.dto.TokenResponse;
+import com.example.web_project_1.service.AuthService;
 import com.example.web_project_1.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/auth")
 public class AuthController {
-
     private final UserService userService;
+    private final AuthService authService;
 
     @Autowired
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, AuthService authService) {
         this.userService = userService;
+        this.authService = authService;
     }
 
-    @GetMapping("/login")
-    public String loginPage(@RequestParam(value = "error", required = false) String error,
-                            @RequestParam(value = "logout", required = false) String logout,
-                            @RequestParam(value = "success", required = false) String success,
-                            Model model) {
-        if (error != null) {
-            model.addAttribute("errorMessage", "Incorrect username or password");
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        try {
+            TokenResponse tokens = authService.login(request);
+            return ResponseEntity.ok(tokens);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
-        if (logout != null) {
-            model.addAttribute("logoutMessage", "You have successfully logged out");
-        }
-        if (success != null) {
-            model.addAttribute("successMessage", "Registration was successful! You can now log in");
-        }
-        return "login";
     }
 
-
-    @GetMapping("/register")
-    public String showRegistrationForm(Model model) {
-        model.addAttribute("user", new RegisterRequestDto());
-        return "register";
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refresh(@RequestBody RefreshRequest request) {
+        try {
+            TokenResponse tokens = authService.refreshToken(request.getRefreshToken());
+            return ResponseEntity.ok(tokens);
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage()); // 403 Reuse detected
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage()); // 401 Invalid token
+        }
     }
 
     @PostMapping("/register")
-    public String registerUser(@Valid @ModelAttribute("user") RegisterRequestDto request,
-                               BindingResult result, Model model) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequestDto request,
+                                          BindingResult result) {
         if (result.hasErrors()) {
-            return "register";
+            return ResponseEntity.badRequest().body("Validation error");
         }
         try {
             userService.registerUser(request);
+            return ResponseEntity.ok("User registered successfully");
         } catch (IllegalStateException e) {
-            result.rejectValue("username", "username.exists", e.getMessage());
-            return "register";
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return "redirect:/auth/login?success";
     }
 }

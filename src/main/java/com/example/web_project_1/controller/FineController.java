@@ -1,5 +1,7 @@
 package com.example.web_project_1.controller;
 
+import com.example.web_project_1.dto.AuthorCreateRequest;
+import com.example.web_project_1.dto.AuthorDetailDto;
 import com.example.web_project_1.dto.FineCreateRequest;
 import com.example.web_project_1.dto.FineDetailDto;
 import com.example.web_project_1.service.FineService;
@@ -35,6 +37,13 @@ public class FineController {
     @GetMapping("/{id}")
     public ResponseEntity<FineDetailDto> getFineById(@PathVariable Long id) {
         return fineService.getFineById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<FineDetailDto> updateFine(@PathVariable Long id, @RequestBody FineCreateRequest request) {
+        return fineService.updateFine(id, request)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

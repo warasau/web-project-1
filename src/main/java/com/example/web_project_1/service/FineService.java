@@ -58,6 +58,24 @@ public class FineService {
     }
 
     @Transactional
+    public Optional<FineDetailDto> updateFine(Long fineId, FineCreateRequest request) {
+        return fineRepository.findById(fineId)
+                .map(existingFine -> {
+                    if (request.getDescription() != null) {
+                        existingFine.setDescription(request.getDescription());
+                    }
+                    if (request.getReaderId() != null) {
+                        Reader newReader = readerRepository.findById(request.getReaderId())
+                                .orElseThrow(() -> new EntityNotFoundException("Reader with id " + request.getReaderId() + " not found."));
+                        existingFine.setReader(newReader);
+                    }
+                    Fine updatedFine = fineRepository.save(existingFine);
+                    return mapper.toFineDetailDto(updatedFine);
+                });
+    }
+
+
+    @Transactional
     public boolean deleteFine(Long id) {
         if (fineRepository.existsById(id)) {
             fineRepository.deleteById(id);
