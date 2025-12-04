@@ -16,7 +16,6 @@ public class AdminUserInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // Считываем значения из application.properties
     @Value("${admin.username}")
     private String adminUsername;
 

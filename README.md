@@ -1,4 +1,4 @@
-# Lab Work 1-4: Introduction to Spring Boot
+# Lab Work 1-6: Introduction to Spring Boot
 
 ## Overview
 
@@ -15,6 +15,8 @@ A web application built with Spring Boot to automate core library operations. Th
 * **PostgreSQL**
 * **Docker Compose**
 * **Maven**
+* **JWT**
+* **TLS**
 
 ## Getting Started
    
@@ -27,8 +29,10 @@ A web application built with Spring Boot to automate core library operations. Th
    DB_PASSWORD={YOUR_PASSWORD}
    DB_NAME={YOUR_DB_NAME}
    
-   ADMIN_USERNAME=admin
-   ADMIN_PASSWORD=Qwe123!@
+   ADMIN_USERNAME={ADMIN}
+   ADMIN_PASSWORD={PASSWORD}
+   
+   JWT_KEY={JWT_KEY}
 ```
    
 2. Run the Database
@@ -72,7 +76,20 @@ New Core Entity: User
 *   `POST /auth/logout`
     *   Logs the current user out
 
-On the first launch, the application creates a default administrator account. Credentials for this account must be configured in the .env file.
+> On the first launch, the application creates a default administrator account. Credentials for this account must be configured in the .env file.
+
+### Lab5:
+#### JWT Authentication and Session Management
+New Core Entity: UserSession
+*   Represents an active user session linked to a user, containing a refresh token, expiration timestamp, and session status (ACTIVE, CLOSED, EXPIRED).
+*   Authentication mechanism transitioned from stateful server-side sessions to stateless JWT (JSON Web Token) architecture with Access and Refresh token rotation.
+
+#### Authentication Endpoints
+*   `POST /auth/refresh`
+    *   Validates the existing refresh token and issues a new Access/Refresh token pair 
+    *   refreshToken:{refreshToken}
+
+> /auth/login chenged: user authentication returns a JSON object containing an Access Token and a Refresh Token
 
 ## API Endpoints
 
@@ -144,3 +161,17 @@ On the first launch, the application creates a default administrator account. Cr
 *   `POST /api/library/process-overdue`
     *   Process Overdue Books
     *   No Body
+
+### Lab6:
+#### HTTPS/TLS and CI
+Implementation of a secure connection using a custom Public Key Infrastructure (PKI) and automation of the build process.
+*   Three-Tier Certificate Chain:
+    *   Generated a custom certificate chain (Root CA -> Intermediate CA -> Server Certificate) using keytool.
+*   TLS Configuration:
+    *   The application is switched to run over HTTPS. 
+    *   The Root CA certificate must be imported into the trusted store on the client machine to avoid browser warnings.
+*   CI Pipeline:
+    *   Configured GitHub Actions workflow for Continuous Integration. 
+    *   The pipeline performs automated compilation, unit testing, and artifact packaging on every push/pull request to the master branch.
+*   Secure Secrets Management: 
+    *   Sensitive data are stored in GitHub Secrets and injected into the build process securely.

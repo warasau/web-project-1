@@ -32,6 +32,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable) // Отключаем CSRF для JWT REST API
+                .requiresChannel(channel -> channel.anyRequest().requiresSecure())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/auth/login", "/auth/register", "/auth/refresh", "/error").permitAll()

@@ -1,5 +1,7 @@
 .env
 blacknote/
+certs/
+src/main/resources/srvCA.jks
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar

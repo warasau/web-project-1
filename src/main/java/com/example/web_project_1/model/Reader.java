@@ -5,9 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -38,5 +36,5 @@ public class Reader {
     @OneToMany(mappedBy = "reader", cascade = CascadeType.ALL, orphanRemoval = true) // Один ко многим: для нескольких штрафов - readerId
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private List<Fine> fines = new ArrayList<>();
+    private Set<Fine> fines = new HashSet<>();
 }
